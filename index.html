@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfterCoffee - The Pinnacle of Coffee Experiences</title>
+    <meta name="description" content="Experience AfterCoffee, where every cup is a journey. Premium coffee, exquisite ambiance, unparalleled taste.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-coffee'%3E%3Cpath d='M10 2v6h3a4 4 0 0 1 4 4v2a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8h9V2Z'/%3E%3Cpath d='M6 18H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h1'/%3E%3Cpath d='M17 18h2a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2h-3'/%3E%3Cpath d='M7 2h8'/%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #0A0A0A;
+            --secondary-bg: #1A1A1A;
+            --text-color: #E0E0E0;
+            --accent-color: #D4AF37; /* Gold */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+        }
+
+        /* Custom scrollbar for aesthetics */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            border: 2px solid var(--primary-bg);
+        }
+
+        /* Custom Tailwind Configuration (Inline) */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @layer utilities {
+            .text-stroke-light {
+                -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+                color: transparent;
+            }
+            .text-stroke-dark {
+                -webkit-text-stroke: 1px rgba(0, 0, 0, 0.3);
+                color: transparent;
+            }
+            .glassmorphic {
+                background-color: var(--glass-bg);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid var(--glass-border);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+        }
+
+        /* Custom Keyframes & Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulseBorder {
+            0% { box-shadow: 0 0 0 0 var(--accent-color); }
+            50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0.2); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        /* Apply animations with Tailwind-like syntax */
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-fade-in-scale { animation: fadeInScale 0.8s ease-out forwards; }
+        .animate-slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+        .animate-slide-in-right { animation: slideInRight 0.8s ease-out forwards; }
+        .animate-pulse-border { animation: pulseBorder 2s infinite; }
+
+        /* Initial states for JS-driven animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(40px); }
+        .animate-on-scroll.in-view { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+
+        .hamburger-icon span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color);
+            margin: 5px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .hamburger-icon.open span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .hamburger-icon.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger-icon.open span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-color min-h-screen">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-12 glassmorphic flex justify-between items-center transform -translate-y-full opacity-0 transition-all duration-700 ease-out" id="main-header">
+        <a href="#hero" class="text-3xl md:text-4xl font-extrabold text-white tracking-tighter hover:text-accent-color transition-colors duration-300">
+            After<span class="text-accent-color">Coffee</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex space-x-8 text-lg font-medium">
+            <a href="#hero" class="hover:text-accent-color transition-colors duration-300 relative group">Home<span class="block h-0.5 bg-accent-color absolute bottom-0 left-0 w-0 group-hover:w-full transition-all duration-300"></span></a>
+            <a href="#about" class="hover:text-accent-color transition-colors duration-300 relative group">About<span class="block h-0.5 bg-accent-color absolute bottom-0 left-0 w-0 group-hover:w-full transition-all duration-300"></span></a>
+            <a href="#menu" class="hover:text-accent-color transition-colors duration-300 relative group">Menu<span class="block h-0.5 bg-accent-color absolute bottom-0 left-0 w-0 group-hover:w-full transition-all duration-300"></span></a>
+            <a href="#experience" class="hover:text-accent-color transition-colors duration-300 relative group">Experience<span class="block h-0.5 bg-accent-color absolute bottom-0 left-0 w-0 group-hover:w-full transition-all duration-300"></span></a>
+            <a href="#contact" class="hover:text-accent-color transition-colors duration-300 relative group">Contact<span class="block h-0.5 bg-accent-color absolute bottom-0 left-0 w-0 group-hover:w-full transition-all duration-300"></span></a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-button" class="md:hidden p-2 relative z-50">
+            <div class="hamburger-icon flex flex-col justify-around h-6">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-primary-bg/95 backdrop-blur-lg z-40 flex flex-col items-center justify-center space-y-8 text-3xl font-bold transition-transform duration-500 ease-in-out transform translate-x-full">
+        <a href="#hero" class="hover:text-accent-color transition-colors duration-300" data-nav-link>Home</a>
+        <a href="#about" class="hover:text-accent-color transition-colors duration-300" data-nav-link>About</a>
+        <a href="#menu" class="hover:text-accent-color transition-colors duration-300" data-nav-link>Menu</a>
+        <a href="#experience" class="hover:text-accent-color transition-colors duration-300" data-nav-link>Experience</a>
+        <a href="#contact" class="hover:text-accent-color transition-colors duration-300" data-nav-link>Contact</a>
+    </div>
+
+    <main class="relative overflow-hidden">
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+            <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+                <source src="https://videos.pexels.com/video-files/13736554/13736554-uhd_2160_3840_24fps.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="absolute inset-0 bg-black/60 backdrop-brightness-75 z-10"></div>
+            <div class="relative z-20 text-center px-4">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold leading-none text-white animate-fade-in animate-delay-100 uppercase tracking-tighter" style="animation-delay: 0.5s;">
+                    <span class="block text-stroke-light mb-2">After</span>
+                    <span class="block text-accent-color">Coffee</span>
+                </h1>
+                <p class="mt-6 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 1.2s;">
+                    Where the art of brewing meets the warmth of companionship.
+                    Experience the moment, sip by sip.
+                </p>
+                <a href="#menu" class="mt-10 inline-block bg-accent-color text-primary-bg px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-accent-color transition-all duration-500 transform hover:scale-105 shadow-lg animate-fade-in animate-pulse-border" style="animation-delay: 1.8s;">
+                    Explore Our Menu
+                </a>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="py-24 md:py-32 px-6 md:px-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                <div class="animate-on-scroll">
+                    <h2 class="text-5xl md:text-6xl font-extrabold mb-8 leading-tight text-accent-color">Our Story. Our Passion.</h2>
+                    <p class="text-lg md:text-xl leading-relaxed mb-6 text-gray-300">
+                        At AfterCoffee, we believe in crafting more than just a beverage; we craft an experience. Born from a shared passion for exceptional coffee and heartfelt conversations, our journey began with a simple idea: to create a space where time slows down, and every sip tells a story.
+                    </p>
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                        We meticulously source the finest beans from sustainable farms around the globe, ensuring each cup delivers a unique profile of aroma and flavor. Our baristas are artisans, dedicated to perfecting every pour, every foam, and every moment you spend with us. Welcome to AfterCoffee, where quality, community, and comfort brew together.
+                    </p>
+                </div>
+                <div class="relative h-96 md:h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl animate-on-scroll">
+                    <img src="https://images.pexels.com/photos/34645485/pexels-photo-34645485.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="About AfterCoffee" class="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-in-out" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/70 to-transparent"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section (Bento Grid) -->
+        <section id="menu" class="py-24 md:py-32 px-6 md:px-12 bg-secondary-bg">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-center mb-16 leading-tight text-white animate-on-scroll">
+                    Our <span class="text-accent-color">Signature</span> Brews & Bites
+                </h2>
+
+                <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-8 animate-on-scroll">
+                    <!-- Item 1 -->
+                    <div class="relative overflow-hidden rounded-xl group cursor-pointer glassmorphic p-6 flex flex-col justify-end transform hover:-translate-y-2 transition-all duration-500 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/34083022/pexels-photo-34083022.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Espresso Elegance" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/90 via-primary-bg/70 to-transparent z-10"></div>
+                        <div class="relative z-20 pt-24">
+                            <h3 class="text-3xl font-bold text-white mb-2">Espresso Elegance</h3>
+                            <p class="text-gray-300 mb-4">A rich, bold shot of our finest single-origin coffee, perfectly extracted for a harmonious balance of crema and depth.</p>
+                            <span class="text-accent-color text-2xl font-bold">$4.50</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="relative overflow-hidden rounded-xl group cursor-pointer glassmorphic p-6 flex flex-col justify-end transform hover:-translate-y-2 transition-all duration-500 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/16961811/pexels-photo-16961811.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Velvet Latte" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/90 via-primary-bg/70 to-transparent z-10"></div>
+                        <div class="relative z-20 pt-24">
+                            <h3 class="text-3xl font-bold text-white mb-2">Velvet Latte</h3>
+                            <p class="text-gray-300 mb-4">Smooth, creamy steamed milk infused with our signature espresso, topped with delicate latte art. A truly comforting classic.</p>
+                            <span class="text-accent-color text-2xl font-bold">$6.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="relative overflow-hidden rounded-xl group cursor-pointer glassmorphic p-6 flex flex-col justify-end transform hover:-translate-y-2 transition-all duration-500 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/19560976/pexels-photo-19560976.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Afternoon Bloom Tea" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/90 via-primary-bg/70 to-transparent z-10"></div>
+                        <div class="relative z-20 pt-24">
+                            <h3 class="text-3xl font-bold text-white mb-2">Afternoon Bloom Tea</h3>
+                            <p class="text-gray-300 mb-4">A calming blend of organic green tea with subtle floral notes. Perfect for a refreshing pause.</p>
+                            <span class="text-accent-color text-2xl font-bold">$5.50</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 (wider on desktop) -->
+                    <div class="lg:col-span-2 relative overflow-hidden rounded-xl group cursor-pointer glassmorphic p-6 flex flex-col justify-end transform hover:-translate-y-2 transition-all duration-500 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/32536549/pexels-photo-32536549.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Artisan Pastries" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/90 via-primary-bg/70 to-transparent z-10"></div>
+                        <div class="relative z-20 pt-24">
+                            <h3 class="text-3xl font-bold text-white mb-2">Artisan Pastries</h3>
+                            <p class="text-gray-300 mb-4">Freshly baked croissants, delicate macarons, and rich chocolate brownies. The perfect companion to your coffee.</p>
+                            <span class="text-accent-color text-2xl font-bold">From $3.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="relative overflow-hidden rounded-xl group cursor-pointer glassmorphic p-6 flex flex-col justify-end transform hover:-translate-y-2 transition-all duration-500 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/28881666/pexels-photo-28881666.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Iced Caramel Macchiato" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500 z-0">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg/90 via-primary-bg/70 to-transparent z-10"></div>
+                        <div class="relative z-20 pt-24">
+                            <h3 class="text-3xl font-bold text-white mb-2">Iced Caramel Macchiato</h3>
+                            <p class="text-gray-300 mb-4">Layers of vanilla syrup, ice, milk, espresso, and a drizzle of buttery caramel. A refreshing indulgence.</p>
+                            <span class="text-accent-color text-2xl font-bold">$6.50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-16 animate-on-scroll">
+                    <a href="#" class="inline-block bg-accent-color text-primary-bg px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-accent-color transition-all duration-500 transform hover:scale-105 shadow-lg">
+                        View Full Menu
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24 md:py-32 px-6 md:px-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-center mb-16 leading-tight text-white animate-on-scroll">
+                    The <span class="text-accent-color">AfterCoffee</span> Experience
+                </h2>
+
+                <div class="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl animate-on-scroll">
+                    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+                        <source src="https://videos.pexels.com/video-files/34164185/14483895_360_640_24fps.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center p-8">
+                        <div class="text-center">
+                            <h3 class="text-4xl md:text-5xl font-extrabold text-white mb-6 animate-fade-in-scale">A Haven of Comfort & Creativity</h3>
+                            <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto animate-fade-in-scale" style="animation-delay: 0.3s;">
+                                Our space is designed to inspire. From cozy nooks perfect for quiet contemplation to vibrant common areas ideal for lively discussions, AfterCoffee is more than just a cafe—it's a community hub.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 animate-on-scroll">
+                    <div class="glassmorphic p-8 rounded-xl flex flex-col items-start hover:shadow-accent-color/20 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-3xl font-bold text-accent-color mb-4">Inviting Ambiance</h4>
+                        <p class="text-gray-300">Soft lighting, comfortable seating, and curated music create the perfect atmosphere for relaxation or productivity.</p>
+                    </div>
+                    <div class="glassmorphic p-8 rounded-xl flex flex-col items-start hover:shadow-accent-color/20 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-3xl font-bold text-accent-color mb-4">Art & Design</h4>
+                        <p class="text-gray-300">Local artwork adorns our walls, blending modern aesthetics with the rustic charm of a classic coffeehouse.</p>
+                    </div>
+                    <div class="glassmorphic p-8 rounded-xl flex flex-col items-start hover:shadow-accent-color/20 hover:shadow-lg transition-shadow duration-300">
+                        <h4 class="text-3xl font-bold text-accent-color mb-4">Community Events</h4>
+                        <p class="text-gray-300">Join us for live music, poetry readings, and workshops – fostering connection and creativity.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 md:py-32 px-6 md:px-12 bg-secondary-bg">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-center mb-16 leading-tight text-white animate-on-scroll">
+                    Visit <span class="text-accent-color">Us</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-16 items-start">
+                    <div class="animate-on-scroll">
+                        <div class="h-96 w-full rounded-2xl overflow-hidden shadow-2xl mb-8 glassmorphic border-0">
+                            <!-- Google Maps Embed Placeholder -->
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509745!2d144.953735315317!3d-37.81627917975176!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0x6a058d24666f7f0!2sFederation%20Square!5e0!3m2!1sen!2sau!4v1678901234567!5m2!1sen!2sau"
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        <h3 class="text-4xl font-bold text-accent-color mb-4">Our Location</h3>
+                        <p class="text-lg text-gray-300 mb-2">123 Brew Street, Coffeeville, CA 90210</p>
+                        <p class="text-lg text-gray-300 mb-2">Phone: <a href="tel:+15551234567" class="hover:underline text-white">+1 (555) 123-4567</a></p>
+                        <p class="text-lg text-gray-300 mb-2">Email: <a href="mailto:info@aftercoffee.com" class="hover:underline text-white">info@aftercoffee.com</a></p>
+                        <h4 class="text-3xl font-bold text-accent-color mt-8 mb-4">Hours of Operation</h4>
+                        <ul class="text-lg text-gray-300 space-y-2">
+                            <li>Monday - Friday: 7:00 AM - 8:00 PM</li>
+                            <li>Saturday: 8:00 AM - 9:00 PM</li>
+                            <li>Sunday: 8:00 AM - 6:00 PM</li>
+                        </ul>
+                    </div>
+
+                    <div class="glassmorphic p-8 rounded-2xl shadow-xl animate-on-scroll">
+                        <h3 class="text-4xl font-bold text-white mb-6">Send Us a Message</h3>
+                        <form class="space-y-6">
+                            <div>
+                                <label for="name" class="block text-gray-300 text-lg font-medium mb-2">Name</label>
+                                <input type="text" id="name" name="name" class="w-full p-4 rounded-lg bg-primary-bg border border-gray-700 focus:border-accent-color focus:ring-1 focus:ring-accent-color outline-none text-white transition-all duration-300" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-300 text-lg font-medium mb-2">Email</label>
+                                <input type="email" id="email" name="email" class="w-full p-4 rounded-lg bg-primary-bg border border-gray-700 focus:border-accent-color focus:ring-1 focus:ring-accent-color outline-none text-white transition-all duration-300" placeholder="your@email.com">
+                            </div>
+                            <div>
+                                <label for="message" class="block text-gray-300 text-lg font-medium mb-2">Message</label>
+                                <textarea id="message" name="message" rows="6" class="w-full p-4 rounded-lg bg-primary-bg border border-gray-700 focus:border-accent-color focus:ring-1 focus:ring-accent-color outline-none text-white transition-all duration-300" placeholder="How can we help you?"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-accent-color text-primary-bg px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-accent-color transition-all duration-500 transform hover:scale-105 shadow-lg">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-bg py-12 px-6 md:px-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto text-center md:flex md:justify-between md:items-center">
+            <p class="text-gray-500 text-sm md:text-base mb-6 md:mb-0">&copy; <span id="current-year"></span> AfterCoffee. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-accent-color transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.776-3.89 1.094 0 2.24.195 2.24.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-accent-color transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.002 3.797.048.843.038 1.48.15 2.07.355.6.207 1.127.488 1.628.989.5.5.78.928.989 1.629.208.59.32 1.227.358 2.07.046 1.013.048 1.371.048 3.797s-.002 2.784-.048 3.797c-.038.843-.15 1.48-.355 2.07-.207.6-.488 1.127-.989 1.628-.5.5-.928.78-1.629.989-.59.208-1.227.32-2.07.358-1.013.046-1.371.048-3.797.048s-2.784-.002-3.797-.048c-.843-.038-1.48-.15-2.07-.355-.6-.207-1.127-.488-1.628-.989-.5-.5-.78-.928-.989-1.629-.208-.59-.32-1.227-.358-2.07-.046-1.013-.048-1.371-.048-3.797s.002-2.784.048-3.797c.038-.843.15-1.48.355-2.07.207-.6.488-1.127.989-1.628.5-.5.928-.78 1.629-.989.59-.208 1.227-.32 2.07-.358C9.526 2.002 9.884 2 12.315 2zm0 0c-2.464 0-2.84.002-3.878.056-.874.04-1.556.16-2.122.378-.564.218-1.013.52-1.46.967-.447.448-.749.897-.967 1.46-.218.566-.338 1.248-.378 2.122-.054 1.038-.056 1.414-.056 3.878s.002 2.84.056 3.878c.04.874.16 1.556.378 2.122.218.564.52 1.013.967 1.46.448.447.897.749 1.46.967.566.218 1.248.338 2.122.378 1.038.054 1.414.056 3.878.056s2.84-.002 3.878-.056c.874-.04 1.556-.16 2.122-.378.564-.218 1.013-.52 1.46-.967.447-.448.749-.897.967-1.46.218-.566.338-1.248.378-2.122.054-1.038.056-1.414.056-3.878s-.002-2.84-.056-3.878c-.04-.874-.16-1.556-.378-2.122-.218-.564-.52-1.013-.967-1.46-.448-.447-.749-.897-.967-1.46-.218-.566-.338-1.248-.378-2.122C15.156 2.002 14.78 2 12.315 2zM12 7.58c-2.43 0-4.42 1.99-4.42 4.42s1.99 4.42 4.42 4.42 4.42-1.99 4.42-4.42-1.99-4.42-4.42-4.42zM12 14.28c-1.268 0-2.28-1.012-2.28-2.28s1.012-2.28 2.28-2.28 2.28 1.012 2.28 2.28-1.012 2.28-2.28 2.28zM17.476 4.605c-.657 0-1.19.533-1.19 1.19s.533 1.19 1.19 1.19 1.19-.533 1.19-1.19-.533-1.19-1.19-1.19z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-accent-color transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8.29 20.251c-4.426 0-8.29-3.328-8.29-8.29 0-1.24.234-2.432.684-3.54a8.27 8.27 0 012.384-2.894 8.27 8.27 0 013.54-1.191A8.34 8.34 0 0112 2c4.426 0 8 3.574 8 8 0 4.29-3.327 7.78-7.587 8.23l.006.002-.007.001h-.001C8.75 20.245 8.29 20.251 8.29 20.251zm-4.38-7.962c-.06.27-.09.544-.09.825 0 2.296.883 4.462 2.478 6.196l-.004-.002a7.28 7.28 0 005.157 2.128c.414 0 .82-.04 1.21-.115L12 18.006c0-.52-.162-1.01-.462-1.42.062-.016.126-.03.19-.045.026-.006.05-.01.077-.015.006-.002.012-.003.018-.005.004-.001.008-.002.012-.003.01-.002.02-.004.03-.006a.75.75 0 00.322-.397c.224-.593.18-1.3-.13-1.87l-.007-.012c-.22-.39-.413-.807-.585-1.246a4.57 4.57 0 01-.107-1.18c.005-.187.02-.373.047-.557l.004-.03.007-.04.008-.05a.75.75 0 00-.54-.86c-.354-.085-.714-.132-1.075-.143l-.006-.001h-.001a4.55 4.55 0 00-4.053 2.534zm3.9-3.268c.257-.15.545-.23.83-.23.242 0 .485.048.71.144l.002.001.002.001.002.001c.216.088.42.2.61.332.222.158.42.34.6.54.214.238.397.498.54.778.175.342.308.705.395 1.085l.002.01c.02.09.034.18.046.27.01.076.014.152.016.23.002.07.002.14.002.21 0 .28-.02.556-.057.825l-.004.03-.008.05-.01.06-.013.08a.75.75 0 00.738.924c.36-.04.717-.11 1.06-.212l.006-.002.006-.002c.307-.094.6-.217.87-.367l.003-.002c.28-.152.53-.33.75-.53l.006-.004c.22-.2.41-.417.57-.65l.004-.005c.16-.233.29-.48.39-.738l.002-.005c.1-.258.17-.526.21-.798l.002-.016c.04-.27.05-.544.05-.824 0-1.29-.53-2.508-1.488-3.414A7.276 7.276 0 0012 4.75a7.28 7.28 0 00-5.163 2.13c-.958.905-1.487 2.122-1.487 3.412 0 .58.077 1.15.226 1.69l.005.013z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Vanilla JS for interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.getElementById('main-header');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+            const currentYearSpan = document.getElementById('current-year');
+
+            // Set current year in footer
+            currentYearSpan.textContent = new Date().getFullYear();
+
+            // Header visibility on scroll
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.classList.remove('-translate-y-full', 'opacity-0');
+                    header.classList.add('translate-y-0', 'opacity-100');
+                } else {
+                    header.classList.add('-translate-y-full', 'opacity-0');
+                    header.classList.remove('translate-y-0', 'opacity-100');
+                }
+                lastScrollY = window.scrollY;
+            });
+
+            // Mobile menu toggle
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuOverlay.classList.toggle('translate-x-full');
+                mobileMenuButton.querySelector('.hamburger-icon').classList.toggle('open');
+                document.body.classList.toggle('overflow-hidden'); // Prevent scrolling body when menu open
+            });
+
+            // Close mobile menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuOverlay.classList.add('translate-x-full');
+                    mobileMenuButton.querySelector('.hamburger-icon').classList.remove('open');
+                    document.body.classList.remove('overflow-hidden');
+                });
+            });
+
+            // Smooth scrolling for all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Intersection Observer for scroll-reveal animations
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.2 // Trigger when 20% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        // Optional: Unobserve after animation to prevent re-triggering
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            animateOnScrollElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
